@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { StarField } from "@/components/star-field"
+import { HeroImageTransition } from "@/components/hero-image-transition"
 
 export default function Home() {
   return (
@@ -42,13 +43,7 @@ export default function Home() {
           </div>
         </div>
         <div className="absolute right-0 bottom-0 w-1/2 h-full hidden lg:block">
-          <Image
-            src="/hero-character.png"
-            alt="Gaming Character"
-            fill
-            className="object-contain object-right-bottom"
-            priority
-          />
+          <HeroImageTransition />
         </div>
       </section>
 
@@ -65,7 +60,9 @@ export default function Home() {
             </div>
           </div>
           <Button asChild className="bg-[#6074f4] hover:bg-[#4a5fd0] text-white">
-            <Link href="https://discord.gg/skyfall">Join Discord</Link>
+            <a href="https://discord.com/invite/skyfallproducts" target="_blank" rel="noopener noreferrer">
+              Join Discord
+            </a>
           </Button>
         </div>
       </section>
@@ -86,6 +83,13 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6074f4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-[#6074f4]/10 to-transparent transform rotate-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                 <Image src="/product-1.png" alt="Warzone Cheat" fill className="object-cover z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                  <h3 className="font-medium text-white">Warzone Cheat</h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[#6074f4] font-bold">$19.99</span>
+                    <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Undetected</span>
+                  </div>
+                </div>
               </div>
             </Link>
             <Link href="/products/valorant" className="group">
@@ -93,6 +97,13 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6074f4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-[#6074f4]/10 to-transparent transform rotate-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                 <Image src="/product-2.png" alt="Valorant Cheat" fill className="object-cover z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                  <h3 className="font-medium text-white">Valorant Cheat</h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[#6074f4] font-bold">$24.99</span>
+                    <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Undetected</span>
+                  </div>
+                </div>
               </div>
             </Link>
             <Link href="/products/apex" className="group">
@@ -100,6 +111,13 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6074f4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-[#6074f4]/10 to-transparent transform rotate-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                 <Image src="/product-3.png" alt="Apex Legends Cheat" fill className="object-cover z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                  <h3 className="font-medium text-white">Apex Legends Cheat</h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[#6074f4] font-bold">$19.99</span>
+                    <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Undetected</span>
+                  </div>
+                </div>
               </div>
             </Link>
             <Link href="/products/fortnite" className="group">
@@ -107,6 +125,13 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6074f4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-[#6074f4]/10 to-transparent transform rotate-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                 <Image src="/product-4.png" alt="Fortnite Cheat" fill className="object-cover z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                  <h3 className="font-medium text-white">Fortnite Cheat</h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[#6074f4] font-bold">$19.99</span>
+                    <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">Updating</span>
+                  </div>
+                </div>
               </div>
             </Link>
             <Link href="/products/spoofer" className="group">
@@ -114,6 +139,13 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6074f4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-[#6074f4]/10 to-transparent transform rotate-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                 <Image src="/product-5.png" alt="HWID Spoofer" fill className="object-cover z-10" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                  <h3 className="font-medium text-white">HWID Spoofer</h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[#6074f4] font-bold">$29.99</span>
+                    <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Undetected</span>
+                  </div>
+                </div>
               </div>
             </Link>
           </div>

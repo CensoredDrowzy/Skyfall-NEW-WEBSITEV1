@@ -19,10 +19,13 @@ export default function Footer() {
               Home
             </Link>
             <Link href="/products" className="text-sm text-zinc-400 hover:text-white">
-              Products
+              Store
             </Link>
             <Link href="/status" className="text-sm text-zinc-400 hover:text-white">
               Status
+            </Link>
+            <Link href="/forums" className="text-sm text-zinc-400 hover:text-white">
+              Forums
             </Link>
             <Link href="/vouches" className="text-sm text-zinc-400 hover:text-white">
               Vouches
@@ -31,7 +34,7 @@ export default function Footer() {
               FAQ
             </Link>
             <a
-              href="https://discord.gg/skyfall"
+              href="https://discord.com/invite/skyfallproducts"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-zinc-400 hover:text-white"

@@ -8,19 +8,31 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { ActiveUsersCounter } from "@/components/active-users-counter"
+import { useAuth } from "@/lib/auth-provider"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const routes = [
   { name: "Home", path: "/" },
-  { name: "Products", path: "/products" },
-  { name: "Status", path: "/status" },
+  { name: "Store", path: "/products", icon: "🛒" },
+  { name: "Status", path: "/status", icon: "📊" },
+  { name: "Forums", path: "/forums", icon: "💬" },
   { name: "Vouches", path: "/vouches" },
   { name: "FAQ", path: "/faq" },
-  { name: "Discord", path: "https://discord.gg/skyfall", external: true },
+  { name: "Discord", path: "https://discord.com/invite/skyfallproducts", external: true },
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,6 +77,7 @@ export default function Navbar() {
                   rel="noopener noreferrer"
                   className="px-3 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
                 >
+                  {route.icon && <span className="mr-1">{route.icon}</span>}
                   {route.name}
                 </a>
               ) : (
@@ -73,6 +86,7 @@ export default function Navbar() {
                   href={route.path}
                   className="px-3 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
                 >
+                  {route.icon && <span className="mr-1">{route.icon}</span>}
                   {route.name}
                 </Link>
               ),
@@ -88,15 +102,52 @@ export default function Navbar() {
                 className="pl-8 bg-zinc-900 border-zinc-700 text-white focus:border-[#6074f4] focus:ring-[#6074f4]"
               />
             </div>
-            <Link
-              href="/login"
-              className="hidden md:inline-flex text-sm font-medium text-zinc-400 hover:text-white transition-colors"
-            >
-              Customer Login
-            </Link>
-            <Button className="hidden md:inline-flex bg-[#6074f4] hover:bg-[#4a5fd0] text-white">
-              <Link href="/register">Sign Up</Link>
-            </Button>
+
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.image || ""} alt={user.name || "User"} />
+                      <AvatarFallback className="bg-[#6074f4]">{user.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user.name}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings">Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/purchases">Purchases</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => logout()}>Log out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="hidden md:inline-flex text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Button className="hidden md:inline-flex bg-[#6074f4] hover:bg-[#4a5fd0] text-white">
+                  <Link href="/register">Sign Up</Link>
+                </Button>
+              </>
+            )}
+
             <Button variant="ghost" size="icon" className="md:hidden text-white" onClick={() => setIsOpen(true)}>
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle menu</span>
@@ -140,6 +191,7 @@ export default function Navbar() {
                     className="text-lg font-medium text-zinc-400 hover:text-white transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
+                    {route.icon && <span className="mr-2">{route.icon}</span>}
                     {route.name}
                   </a>
                 ) : (
@@ -149,23 +201,57 @@ export default function Navbar() {
                     className="text-lg font-medium text-zinc-400 hover:text-white transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
+                    {route.icon && <span className="mr-2">{route.icon}</span>}
                     {route.name}
                   </Link>
                 ),
               )}
               <div className="pt-4 mt-4 border-t border-zinc-800 flex flex-col gap-4">
-                <Link
-                  href="/login"
-                  className="text-lg font-medium text-zinc-400 hover:text-white transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Customer Login
-                </Link>
-                <Button className="bg-[#6074f4] hover:bg-[#4a5fd0] text-white w-full">
-                  <Link href="/register" onClick={() => setIsOpen(false)}>
-                    Sign Up
-                  </Link>
-                </Button>
+                {user ? (
+                  <>
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.image || ""} alt={user.name || "User"} />
+                        <AvatarFallback className="bg-[#6074f4]">{user.name?.charAt(0) || "U"}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium text-white">{user.name}</p>
+                        <p className="text-xs text-zinc-400">{user.email}</p>
+                      </div>
+                    </div>
+                    <Link
+                      href="/dashboard"
+                      className="text-lg font-medium text-zinc-400 hover:text-white transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <Button
+                      className="bg-zinc-800 hover:bg-zinc-700 text-white w-full"
+                      onClick={() => {
+                        logout()
+                        setIsOpen(false)
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="text-lg font-medium text-zinc-400 hover:text-white transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Button className="bg-[#6074f4] hover:bg-[#4a5fd0] text-white w-full">
+                      <Link href="/register" onClick={() => setIsOpen(false)}>
+                        Sign Up
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
