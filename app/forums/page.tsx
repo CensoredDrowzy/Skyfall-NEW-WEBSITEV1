@@ -3,124 +3,27 @@ import { StarField } from "@/components/star-field"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, MessageSquare, Users, Clock, Eye, ArrowRight, Pin } from "lucide-react"
+import { Search, MessageSquare, Clock, Eye, ArrowRight } from "lucide-react"
+import { getForumCategories, getRecentThreads } from "../actions/forum"
 
-// Forum categories
-const categories = [
-  {
-    id: "announcements",
-    name: "Announcements",
-    description: "Official announcements from the SkyFall team",
-    icon: <Pin className="h-5 w-5 text-[#6074f4]" />,
-    threads: 12,
-    posts: 48,
-    lastPost: {
-      title: "Important Update: New Products Coming Soon",
-      author: "Admin",
-      date: "2 hours ago",
-    },
-  },
-  {
-    id: "general",
-    name: "General Discussion",
-    description: "Discuss anything related to SkyFall products",
-    icon: <MessageSquare className="h-5 w-5 text-[#6074f4]" />,
-    threads: 156,
-    posts: 1243,
-    lastPost: {
-      title: "My experience with the new Warzone cheat",
-      author: "GamerX",
-      date: "15 minutes ago",
-    },
-  },
-  {
-    id: "support",
-    name: "Support",
-    description: "Get help with any issues you're experiencing",
-    icon: <Users className="h-5 w-5 text-[#6074f4]" />,
-    threads: 89,
-    posts: 432,
-    lastPost: {
-      title: "Installation problem on Windows 11",
-      author: "NewUser123",
-      date: "1 hour ago",
-    },
-  },
-  {
-    id: "suggestions",
-    name: "Suggestions",
-    description: "Share your ideas for improving our products",
-    icon: <MessageSquare className="h-5 w-5 text-[#6074f4]" />,
-    threads: 64,
-    posts: 287,
-    lastPost: {
-      title: "Feature request for Apex Legends cheat",
-      author: "ApexPredator",
-      date: "3 hours ago",
-    },
-  },
-]
+export default async function ForumsPage() {
+  const categories = await getForumCategories()
+  const recentThreads = await getRecentThreads(5)
 
-// Recent threads
-const recentThreads = [
-  {
-    id: 1,
-    title: "Important Update: New Products Coming Soon",
-    category: "Announcements",
-    author: "Admin",
-    replies: 36,
-    views: 1243,
-    lastReply: "2 hours ago",
-    pinned: true,
-    locked: false,
-  },
-  {
-    id: 2,
-    title: "My experience with the new Warzone cheat",
-    category: "General Discussion",
-    author: "GamerX",
-    replies: 24,
-    views: 342,
-    lastReply: "15 minutes ago",
-    pinned: false,
-    locked: false,
-  },
-  {
-    id: 3,
-    title: "Installation problem on Windows 11",
-    category: "Support",
-    author: "NewUser123",
-    replies: 12,
-    views: 156,
-    lastReply: "1 hour ago",
-    pinned: false,
-    locked: false,
-  },
-  {
-    id: 4,
-    title: "Feature request for Apex Legends cheat",
-    category: "Suggestions",
-    author: "ApexPredator",
-    replies: 8,
-    views: 124,
-    lastReply: "3 hours ago",
-    pinned: false,
-    locked: false,
-  },
-  {
-    id: 5,
-    title: "How to avoid HWID bans?",
-    category: "General Discussion",
-    author: "SafetyFirst",
-    replies: 42,
-    views: 876,
-    lastReply: "5 hours ago",
-    pinned: false,
-    locked: false,
-  },
-]
+  // Helper function to format relative time
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
-export default function ForumsPage() {
+    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`
+
+    return new Date(dateString).toLocaleDateString()
+  }
+
   return (
     <main className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -163,7 +66,11 @@ export default function ForumsPage() {
                   <Link href={`/forums/${category.id}`} className="flex flex-col md:flex-row md:items-center">
                     <div className="flex items-center mb-4 md:mb-0 md:w-1/2">
                       <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center mr-4">
-                        {category.icon}
+                        {category.icon ? (
+                          <span className="text-[#6074f4]">{category.icon}</span>
+                        ) : (
+                          <MessageSquare className="h-5 w-5 text-[#6074f4]" />
+                        )}
                       </div>
                       <div>
                         <h3 className="font-bold text-white">{category.name}</h3>
@@ -172,18 +79,24 @@ export default function ForumsPage() {
                     </div>
                     <div className="flex items-center justify-between md:justify-end md:w-1/2 md:space-x-12">
                       <div className="text-center">
-                        <p className="text-lg font-bold text-white">{category.threads}</p>
+                        <p className="text-lg font-bold text-white">{category.thread_count}</p>
                         <p className="text-xs text-zinc-500">Threads</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-lg font-bold text-white">{category.posts}</p>
+                        <p className="text-lg font-bold text-white">{category.post_count}</p>
                         <p className="text-xs text-zinc-500">Posts</p>
                       </div>
                       <div className="hidden md:block text-right">
-                        <p className="text-sm font-medium text-white">{category.lastPost.title}</p>
-                        <p className="text-xs text-zinc-500">
-                          by {category.lastPost.author} • {category.lastPost.date}
-                        </p>
+                        {category.last_post ? (
+                          <>
+                            <p className="text-sm font-medium text-white">{category.last_post.title}</p>
+                            <p className="text-xs text-zinc-500">
+                              by {category.last_post.author} • {getRelativeTime(category.last_post.date)}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="text-sm text-zinc-500">No posts yet</p>
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -233,7 +146,7 @@ export default function ForumsPage() {
                       </div>
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 text-zinc-500 mr-1" />
-                        <span className="text-sm text-zinc-400">{thread.lastReply}</span>
+                        <span className="text-sm text-zinc-400">{getRelativeTime(thread.last_reply)}</span>
                       </div>
                     </div>
                   </Link>
@@ -254,11 +167,15 @@ export default function ForumsPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Total Threads:</span>
-                  <span className="text-white font-medium">321</span>
+                  <span className="text-white font-medium">
+                    {categories.reduce((acc, cat) => acc + Number.parseInt(cat.thread_count), 0)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Total Posts:</span>
-                  <span className="text-white font-medium">2,010</span>
+                  <span className="text-white font-medium">
+                    {categories.reduce((acc, cat) => acc + Number.parseInt(cat.post_count), 0)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Members:</span>
